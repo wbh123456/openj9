@@ -1287,7 +1287,7 @@ TR::Block * TR_J9ByteCodeIlGenerator::walker(TR::Block * prevBlock)
          case J9BCdaload: loadArrayElement(TR::Double);                             _bcIndex += 1; break;
          case J9BCaaload: loadArrayElement(TR::Address);                            _bcIndex += 1; break;
          case J9BCbaload: loadArrayElement(TR::Int8);             genUnary(TR::b2i); _bcIndex += 1; break;
-         case J9BCcaload: loadArrayElement(TR::Int16, TR::cloadi); genUnary(TR::su2i); _bcIndex += 1; break;
+         case J9BCcaload: loadArrayElement(TR::Int16);            genUnary(TR::su2i); _bcIndex += 1; break;
          case J9BCsaload: loadArrayElement(TR::Int16);            genUnary(TR::s2i); _bcIndex += 1; break;
 
          case J9BCiloadw: loadAuto(TR::Int32,  next2Bytes()); _bcIndex += 3; break;
@@ -1342,7 +1342,7 @@ TR::Block * TR_J9ByteCodeIlGenerator::walker(TR::Block * prevBlock)
          case J9BCdastore:                   storeArrayElement(TR::Double);           _bcIndex += 1; break;
          case J9BCaastore:                   storeArrayElement(TR::Address);          _bcIndex += 1; break;
          case J9BCbastore: genUnary(TR::i2b); storeArrayElement(TR::Int8);             _bcIndex += 1; break;
-         case J9BCcastore: genUnary(TR::i2s); storeArrayElement(TR::Int16, TR::cstorei);_bcIndex += 1; break;
+         case J9BCcastore: genUnary(TR::i2s); storeArrayElement(TR::Int16);            _bcIndex += 1; break;
          case J9BCsastore: genUnary(TR::i2s); storeArrayElement(TR::Int16);            _bcIndex += 1; break;
 
          case J9BCistorew: storeAuto(TR::Int32,  next2Bytes()); _bcIndex += 3; break;
@@ -4486,14 +4486,14 @@ TR_J9ByteCodeIlGenerator::genInvoke(TR::SymbolReference * symRef, TR::Node *indi
             //        lconst 0
             //        lconst 0
             //        computeCC
-            //          luadd               adjunct operator
+            //          ladd               adjunct operator
             //            x
             //            y
             TR::Node* y = pop();
             TR::Node* x = pop();
             TR::Node* zero   = TR::Node::create(TR::lconst, 0, 0);
-            TR::Node* luadd  = TR::Node::create(TR::luadd, 2, x, y);
-            TR::Node* carry = TR::Node::create(TR::computeCC, 1, luadd);
+            TR::Node* ladd  = TR::Node::create(TR::ladd, 2, x, y);
+            TR::Node* carry = TR::Node::create(TR::computeCC, 1, ladd);
             TR::Node* luaddc = TR::Node::create(TR::luaddc, 3, zero, zero, carry);
             push(luaddc);
             return luaddc;
@@ -4505,15 +4505,15 @@ TR_J9ByteCodeIlGenerator::genInvoke(TR::SymbolReference * symRef, TR::Node *indi
             //        wh
             //        lconst 0
             //        computeCC
-            //          luadd               adjunct operator
+            //          ladd               adjunct operator
             //            wl
             //            x
             TR::Node* x = pop();
             TR::Node* wh = pop();
             TR::Node* wl = genOrFindAdjunct(wh);
             TR::Node* zero   = TR::Node::create(TR::lconst, 0, 0);
-            TR::Node* luadd  = TR::Node::create(TR::luadd, 2, wl, x);
-            TR::Node* carry = TR::Node::create(TR::computeCC, 1, luadd);
+            TR::Node* ladd  = TR::Node::create(TR::ladd, 2, wl, x);
+            TR::Node* carry = TR::Node::create(TR::computeCC, 1, ladd);
             TR::Node* luaddc = TR::Node::create(TR::luaddc, 3, wh, zero, carry);
             push(luaddc);
             return luaddc;
@@ -4527,14 +4527,14 @@ TR_J9ByteCodeIlGenerator::genInvoke(TR::SymbolReference * symRef, TR::Node *indi
             //        lconst 0
             //        lconst 0
             //        computeCC
-            //          lusub               adjunct operator
+            //          lsub               adjunct operator
             //            x
             //            y
             TR::Node* y = pop();
             TR::Node* x = pop();
             TR::Node* zero   = TR::Node::create(TR::lconst, 0, 0);
-            TR::Node* lusub  = TR::Node::create(TR::lusub, 2, x, y);
-            TR::Node* borrow = TR::Node::create(TR::computeCC, 1, lusub);
+            TR::Node* lsub  = TR::Node::create(TR::lsub, 2, x, y);
+            TR::Node* borrow = TR::Node::create(TR::computeCC, 1, lsub);
             TR::Node* lusubb = TR::Node::create(TR::lusubb, 3, zero, zero, borrow);
             push(lusubb);
             return lusubb;
@@ -4546,15 +4546,15 @@ TR_J9ByteCodeIlGenerator::genInvoke(TR::SymbolReference * symRef, TR::Node *indi
             //        wh
             //        lconst 0
             //        computeCC
-            //          lusub               adjunct operator
+            //          lsub               adjunct operator
             //            wl
             //            x
             TR::Node* x = pop();
             TR::Node* wh = pop();
             TR::Node* wl  = genOrFindAdjunct(wh);
             TR::Node* zero   = TR::Node::create(TR::lconst, 0, 0);
-            TR::Node* lusub  = TR::Node::create(TR::lusub, 2, wl, x);
-            TR::Node* borrow = TR::Node::create(TR::computeCC, 1, lusub);
+            TR::Node* lsub  = TR::Node::create(TR::lsub, 2, wl, x);
+            TR::Node* borrow = TR::Node::create(TR::computeCC, 1, lsub);
             TR::Node* lusubb = TR::Node::create(TR::lusubb, 3, wh, zero, borrow);
             push(lusubb);
             return lusubb;
