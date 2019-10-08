@@ -115,6 +115,8 @@
    java_lang_Math_sqrt,
    java_lang_Math_tan,
    java_lang_Math_tanh,
+   java_lang_Math_fma_D,
+   java_lang_Math_fma_F,
    java_lang_Object_init,
    java_lang_Object_getClass,
    java_lang_Object_clone,
@@ -828,6 +830,8 @@
    java_lang_StrictMath_sqrt,
    java_lang_StrictMath_tan,
    java_lang_StrictMath_tanh,
+   java_lang_StrictMath_fma_D,
+   java_lang_StrictMath_fma_F,
 
    //1421 atomic methods
    java_util_concurrent_atomic_AtomicBoolean_getAndSet,
