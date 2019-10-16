@@ -9806,6 +9806,27 @@ static TR::Register *inlineSinglePrecisionFPTrg1Src2(TR::Node *node, TR::InstOpC
    return targetRegister;
    }
 
+static TR::Register *inlineSinglePrecisionFPTrg1Src3(TR::Node *node, TR::InstOpCode::Mnemonic op, TR::CodeGenerator *cg)
+   {
+   TR_ASSERT_FATAL(node->getNumChildren() == 3, "Wrong number of children in inlineSinglePrecisionFPTrg1Src3");
+
+   TR::Node *firstChild = node->getFirstChild();
+   TR::Node *secondChild = node->getSecondChild();
+   TR::Node *thirdChild = node->getThirdChild();
+   TR::Register *src1Register = cg->evaluate(firstChild);
+   TR::Register *src2Register = cg->evaluate(secondChild);
+   TR::Register *src3Register = cg->evaluate(thirdChild);
+   TR::Register *targetRegister = cg->allocateSinglePrecisionRegister();
+
+   generateTrg1Src3Instruction(cg, op, node, targetRegister, src1Register, src2Register, src3Register);
+
+   node->setRegister(targetRegister);
+   cg->decReferenceCount(firstChild);
+   cg->decReferenceCount(secondChild);
+   cg->decReferenceCount(thirdChild);
+   return targetRegister;
+   } 
+
 static TR::Register *inlineDoublePrecisionFP(TR::Node *node, TR::InstOpCode::Mnemonic op, TR::CodeGenerator *cg)
    {
    TR_ASSERT(node->getNumChildren() == 1, "Wrong number of children in inlineDoublePrecisionFP");
@@ -9842,6 +9863,27 @@ static TR::Register *inlineDoublePrecisionFPTrg1Src2(TR::Node *node, TR::InstOpC
    cg->decReferenceCount(secondChild);
    return targetRegister;
    }
+
+static TR::Register *inlineDoublePrecisionFPTrg1Src3(TR::Node *node, TR::InstOpCode::Mnemonic op, TR::CodeGenerator *cg)
+   {
+   TR_ASSERT_FATAL(node->getNumChildren() == 3, "Wrong number of children in inlineDoublePrecisionFPTrg1Src3");
+
+   TR::Node *firstChild = node->getFirstChild();
+   TR::Node *secondChild = node->getSecondChild();
+   TR::Node *thirdChild = node->getThirdChild();
+   TR::Register *src1Register = cg->evaluate(firstChild);
+   TR::Register *src2Register = cg->evaluate(secondChild);
+   TR::Register *src3Register = cg->evaluate(thirdChild);
+   TR::Register *targetRegister = cg->allocateRegister(TR_FPR);
+
+   generateTrg1Src3Instruction(cg, op, node, targetRegister, src1Register, src2Register, src3Register);
+
+   node->setRegister(targetRegister);
+   cg->decReferenceCount(firstChild);
+   cg->decReferenceCount(secondChild);
+   cg->decReferenceCount(thirdChild);
+   return targetRegister;
+   } 
 
 static TR::Register *inlineAtomicOperation(TR::Node *node, TR::CodeGenerator *cg, TR::MethodSymbol *method)
    {
@@ -12804,6 +12846,18 @@ J9::Power::CodeGenerator::inlineDirectCall(TR::Node *node, TR::Register *&result
             resultReg = inlineDoublePrecisionFPTrg1Src2(node, TR::InstOpCode::fcpsgn, cg);
             return true;
             }
+         break;
+
+      case TR::java_lang_Math_fma_D:
+      case TR::java_lang_StrictMath_fma_D:
+         resultReg = inlineDoublePrecisionFPTrg1Src3(node, TR::InstOpCode::fmadd, cg);
+         return true;
+         break;
+
+      case TR::java_lang_Math_fma_F:
+      case TR::java_lang_StrictMath_fma_F:
+         resultReg = inlineSinglePrecisionFPTrg1Src3(node, TR::InstOpCode::fmadds, cg);
+         return true;
          break;
 
       case TR::java_lang_Short_reverseBytes:
