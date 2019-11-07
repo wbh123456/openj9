@@ -12673,6 +12673,8 @@ J9::Power::CodeGenerator::inlineDirectCall(TR::Node *node, TR::Register *&result
       }
    else if (methodSymbol)
       {
+      printf("Recognized method = %d", int(methodSymbol->getRecognizedMethod()));
+      
       switch (methodSymbol->getRecognizedMethod())
          {
       case TR::java_util_concurrent_ConcurrentLinkedQueue_tmOffer:
@@ -12819,6 +12821,7 @@ J9::Power::CodeGenerator::inlineDirectCall(TR::Node *node, TR::Register *&result
       case TR::java_lang_StrictMath_floor:
          if (methodSymbol->getResolvedMethodSymbol()->canReplaceWithHWInstr())
             {
+            printf("floor method!!!!!!!");
             resultReg = inlineDoublePrecisionFP(node, TR::InstOpCode::frim, cg);
             return true;
             }
@@ -12846,6 +12849,7 @@ J9::Power::CodeGenerator::inlineDirectCall(TR::Node *node, TR::Register *&result
       case TR::java_lang_StrictMath_fma_D:
          if (methodSymbol->getResolvedMethodSymbol()->canReplaceWithHWInstr())
             {
+            printf("FMA MEthod!!!!!!!");
             resultReg = inlineDoublePrecisionFPTrg1Src3(node, TR::InstOpCode::fmadd, cg);
             return true;
             }
