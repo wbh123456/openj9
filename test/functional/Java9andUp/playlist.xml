@@ -328,6 +328,34 @@
 	</test>
 	
 	<test>
+		<testCaseName>Test_Fma</testCaseName>
+		<variations>
+			<variation>-Xint</variation>
+			<variation>-Xjit:count=1,disableAsyncCompilation</variation>
+		</variations>
+		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) \
+	-cp $(Q)$(RESOURCES_DIR)$(P)$(TESTNG)$(P)$(TEST_RESROOT)$(D)GeneralTest.jar$(P)$(LIB_DIR)$(D)asm-all.jar$(Q) \
+	org.testng.TestNG -d $(REPORTDIR) $(Q)$(TEST_RESROOT)$(D)testng.xml$(Q) \
+	-testnames Test_Fma \
+	-groups $(TEST_GROUP) \
+	-excludegroups $(DEFAULT_EXCLUDE); \
+	$(TEST_STATUS)</command>
+		<levels>
+			<level>sanity</level>
+		</levels>
+		<groups>
+			<group>functional</group>
+		</groups>
+		<subsets>
+			<subset>9+</subset>
+		</subsets>
+		<impls>
+			<impl>openj9</impl>
+			<impl>ibm</impl>
+		</impls>
+	</test>
+
+	<test>
 		<testCaseName>Test_Class</testCaseName>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) \
 	-cp $(Q)$(RESOURCES_DIR)$(P)$(TESTNG)$(P)$(TEST_RESROOT)$(D)GeneralTest.jar$(P)$(LIB_DIR)$(D)asm-all.jar$(Q) \

@@ -97,6 +97,11 @@
 			<class name="org.openj9.test.java.lang.Test_Class" />
  		</classes>
 	</test>
+	<test name="Test_Fma">
+		<classes>
+			<class name="org.openj9.test.java.lang.Test_Fma" />
+ 		</classes>
+	</test>
 	<test name="TestJava9AttachAPI">
 		<classes>
 			<class name="org.openj9.test.attachAPI.TestJava9AttachAPI" />
