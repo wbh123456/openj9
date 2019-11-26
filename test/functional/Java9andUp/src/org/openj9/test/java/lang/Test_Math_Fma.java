@@ -1,0 +1,549 @@
+/*******************************************************************************
+ * Copyright (c) 2019, 2019 IBM Corp. and others
+ *
+ * This program and the accompanying materials are made available under
+ * the terms of the Eclipse Public License 2.0 which accompanies this
+ * distribution and is available at https://www.eclipse.org/legal/epl-2.0/
+ * or the Apache License, Version 2.0 which accompanies this distribution and
+ * is available at https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * This Source Code may also be made available under the following
+ * Secondary Licenses when the conditions for such availability set
+ * forth in the Eclipse Public License, v. 2.0 are satisfied: GNU
+ * General Public License, version 2 with the GNU Classpath
+ * Exception [1] and GNU General Public License, version 2 with the
+ * OpenJDK Assembly Exception [2].
+ *
+ * [1] https://www.gnu.org/software/classpath/license.html
+ * [2] http://openjdk.java.net/legal/assembly-exception.html
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0 WITH Classpath-exception-2.0 OR LicenseRef-GPL-2.0 WITH Assembly-exception
+ *******************************************************************************/
+package org.openj9.test.java.lang;
+
+import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
+
+@Test(groups={ "level.sanity" }, invocationCount=2)
+public class Test_Math_Fma 
+    {
+    @Test
+	public void test_Math_fma_double() 
+        {
+        /**
+         * Testing special case: 
+         * If any argument is NaN, the result is NaN.
+         */
+        double a, b, c, r;
+        a = Double.NaN;
+        b = Math.random(); 
+        c = Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Math.random(); 
+        b = Double.NaN;
+        c = Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Math.random(); 
+        b = Math.random(); 
+        c = Double.NaN;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Double.NaN;
+        b = 0; 
+        c = Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = 0; 
+        b = Double.NaN;
+        c = Double.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Double.NEGATIVE_INFINITY; 
+        b = 0; 
+        c = Double.NaN;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        /**
+         * Testing special case: 
+         * If one of the first two arguments is infinite and the other is zero, the result is NaN.
+         */
+        a = Double.POSITIVE_INFINITY;
+        b = 0; 
+        c = Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = 0; 
+        b = Double.POSITIVE_INFINITY; 
+        c = Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Double.NEGATIVE_INFINITY;
+        b = 0; 
+        c = Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = 0;
+        b = Double.NEGATIVE_INFINITY; 
+        c = Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        /**
+         * Testing special case: 
+         * If the exact product of the first two arguments is infinite (in other words, at least one of the arguments is infinite and
+         * the other is neither zero nor NaN) and the third argument is an infinity of the opposite sign, the result is NaN.
+         */
+        a = Double.POSITIVE_INFINITY;
+        b = Math.random(); 
+        c = Double.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Double.NEGATIVE_INFINITY;
+        b = Math.random(); 
+        c = Double.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Math.random();
+        b = Double.POSITIVE_INFINITY;
+        c = Double.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = Math.random();
+        b = Double.NEGATIVE_INFINITY; 
+        c = Double.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = -Math.random();
+        b = Double.NEGATIVE_INFINITY;
+        c = Double.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = -Math.random();
+        b = Double.POSITIVE_INFINITY; 
+        c = Double.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = -Math.random();
+        b = Double.NEGATIVE_INFINITY;
+        c = Double.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        a = -Math.random();
+        b = Double.POSITIVE_INFINITY; 
+        c = Double.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isNaN(r));
+
+        /**
+         * Testing infinity numbers: 
+         */
+        a = Double.POSITIVE_INFINITY;
+        b = 2.2; 
+        c = 3.3;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isInfinite(r));
+
+        a = Double.POSITIVE_INFINITY;
+        b = Double.NEGATIVE_INFINITY; 
+        c = 3.3;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isInfinite(r));
+
+        a = Double.POSITIVE_INFINITY;
+        b = Double.NEGATIVE_INFINITY; 
+        c = Double.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isInfinite(r));
+        
+        a = Double.POSITIVE_INFINITY;
+        b = Double.NEGATIVE_INFINITY; 
+        c = Double.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Double.isInfinite(r));
+
+        /**
+         * Testing against random numbers: 
+         */
+        a = 0.9085095723204865;
+        b = 0.08818918433337497;
+        c = 0.6513665215590198;
+        r = Math.fma(a, b, c);
+        double expected = 0.7314872397010268;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = 0.590462214807549;
+        b = 0.15430281193816775;
+        c = 0.17457974769099827;
+        r = Math.fma(a, b, c);
+        expected = 0.2656897277790415;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = 0.04441749995782596;
+        b = 0.08992714669433366;
+        c = 0.25876787066490525;
+        r = Math.fma(a, b, c);
+        expected = 0.2627622096994082;
+        AssertJUnit.assertEquals(r, expected);
+
+        /**
+         * Testing against boundaries: 
+         */
+        double max = Double.MAX_VALUE;
+        double min = Double.MIN_VALUE;
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, b, c);
+        expected = Double.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min;
+        b = min;
+        c = min;
+        r = Math.fma(a, b, c);
+        expected = 4.9E-324;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max - min;
+        b = max - min;
+        c = max - min;
+        r = Math.fma(a, b, c);
+        expected = Double.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(-a, -b, -c);
+        expected = Double.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min;
+        b = min;
+        c = min;
+        r = Math.fma(-a, -b, -c);
+        expected = -4.9E-324;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max - min;
+        b = max - min;
+        c = max - min;
+        r = Math.fma(a, b, -c);
+        expected = Double.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, -b, c);
+        expected = Double.NEGATIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, b, -c);
+        expected = Double.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, -b, -c);
+        expected = Double.NEGATIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min * 2;
+        b = min * 2;
+        c = min * 2;
+        r = Math.fma(a, b, c);
+        expected = 1.0E-323;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min * 2;
+        b = min * 2;
+        c = min * 2;
+        r = Math.fma(-a, -b, -c);
+        expected = -1.0E-323;
+        AssertJUnit.assertEquals(r, expected);
+        }
+
+    @Test
+    public void test_Math_fma_float() 
+        {
+        /**
+         * Testing special case: 
+         * If any argument is NaN, the result is NaN.
+         */
+        float a, b, c, r;
+        a = Float.NaN;
+        b = (float) Math.random(); 
+        c = (float) Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = (float) Math.random(); 
+        b = Float.NaN;
+        c = (float) Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = (float) Math.random(); 
+        b = (float) Math.random(); 
+        c = Float.NaN;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = Float.NaN;
+        b = 0; 
+        c = (float) Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = 0; 
+        b = Float.NaN;
+        c = Float.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = Float.NEGATIVE_INFINITY; 
+        b = 0; 
+        c = Float.NaN;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        /**
+         * Testing special case: 
+         * If one of the first two arguments is infinite and the other is zero, the result is NaN.
+         */
+        a = Float.POSITIVE_INFINITY;
+        b = 0; 
+        c = (float) Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = 0; 
+        b = Float.POSITIVE_INFINITY; 
+        c = (float) Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = Float.NEGATIVE_INFINITY;
+        b = 0; 
+        c = (float) Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = 0;
+        b = Float.NEGATIVE_INFINITY; 
+        c = (float) Math.random();
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        /**
+         * Testing special case: 
+         * If the exact product of the first two arguments is infinite (in other words, at least one of the arguments is infinite and
+         * the other is neither zero nor NaN) and the third argument is an infinity of the opposite sign, the result is NaN.
+         */
+        a = Float.POSITIVE_INFINITY;
+        b = (float) Math.random(); 
+        c = Float.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = Float.NEGATIVE_INFINITY;
+        b = (float) Math.random(); 
+        c = Float.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = (float) Math.random();
+        b = Float.POSITIVE_INFINITY;
+        c = Float.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = (float) Math.random();
+        b = Float.NEGATIVE_INFINITY; 
+        c = Float.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = - (float) Math.random();
+        b = Float.NEGATIVE_INFINITY;
+        c = Float.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = - (float) Math.random();
+        b = Float.POSITIVE_INFINITY; 
+        c = Float.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = - (float) Math.random();
+        b = Float.NEGATIVE_INFINITY;
+        c = Float.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        a = - (float) Math.random();
+        b = Float.POSITIVE_INFINITY; 
+        c = Float.POSITIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isNaN(r));
+
+        /**
+         * Testing infinity numbers: 
+         */
+        a = Float.POSITIVE_INFINITY;
+        b = 2.2f; 
+        c = 3.3f;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isInfinite(r));
+
+        a = Float.POSITIVE_INFINITY;
+        b = Float.NEGATIVE_INFINITY; 
+        c = 3.3f;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isInfinite(r));
+
+        a = Float.POSITIVE_INFINITY;
+        b = Float.NEGATIVE_INFINITY; 
+        c = Float.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isInfinite(r));
+        
+        a = Float.POSITIVE_INFINITY;
+        b = Float.NEGATIVE_INFINITY; 
+        c = Float.NEGATIVE_INFINITY;
+        r = Math.fma(a, b, c);
+        AssertJUnit.assertTrue(Float.isInfinite(r));
+
+        /**
+         * Testing against random numbers: 
+         */
+        a = 0.8862447f;
+        b = 0.576474f;
+        c = 0.5877134f;
+        r = Math.fma(a, b, c);
+        float expected = 1.0986105f;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = 0.9664105f;
+        b = 0.96392494f;
+        c = 0.6710392f;
+        r = Math.fma(a, b, c);
+        expected = 1.6025864f;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = 0.7614613f;
+        b = 0.9316474f;
+        c = 0.47867614f;
+        r = Math.fma(a, b, c);
+        expected = 1.1880896f;
+        AssertJUnit.assertEquals(r, expected);
+
+        /**
+         * Testing against boundaries: 
+         */
+        float max = Float.MAX_VALUE;
+        float min = Float.MIN_VALUE;
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, b, c);
+        expected = Float.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min;
+        b = min;
+        c = min;
+        r = Math.fma(a, b, c);
+        expected = 1.4E-45f;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max - min;
+        b = max - min;
+        c = max - min;
+        r = Math.fma(a, b, c);
+        expected = Float.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(-a, -b, -c);
+        expected = Float.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min;
+        b = min;
+        c = min;
+        r = Math.fma(-a, -b, -c);
+        expected = -1.4E-45f;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max - min;
+        b = max - min;
+        c = max - min;
+        r = Math.fma(a, b, -c);
+        expected = Float.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, -b, c);
+        expected = Float.NEGATIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, b, -c);
+        expected = Float.POSITIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = max;
+        b = max;
+        c = max;
+        r = Math.fma(a, -b, -c);
+        expected = Float.NEGATIVE_INFINITY;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min * 2;
+        b = min * 2;
+        c = min * 2;
+        r = Math.fma(a, b, c);
+        expected = 2.8E-45f;
+        AssertJUnit.assertEquals(r, expected);
+
+        a = min * 2;
+        b = min * 2;
+        c = min * 2;
+        r = Math.fma(-a, -b, -c);
+        expected = -2.8E-45f;
+        AssertJUnit.assertEquals(r, expected);
+        }
+}
