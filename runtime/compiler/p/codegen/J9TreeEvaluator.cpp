@@ -9810,6 +9810,11 @@ static TR::Register *inlineSinglePrecisionFPTrg1Src3(TR::Node *node, TR::InstOpC
    {
    TR_ASSERT_FATAL(node->getNumChildren() == 3, "Wrong number of children in inlineSinglePrecisionFPTrg1Src3");
 
+   TR::DataType type = node->getDataType();
+   printf("Node Type = ", type);
+   if(type == TR::Float) printf("\nFLOAT!!\n");
+   if(type == TR::Double) printf("\nDOUBLE!!\n");
+
    TR::Node *firstChild = node->getFirstChild();
    TR::Node *secondChild = node->getSecondChild();
    TR::Node *thirdChild = node->getThirdChild();
